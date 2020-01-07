@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+
+when = {{ ninja_when }}
+
+# Variables
+BK_DATE=$(date +%Y.%m.%d)
+
+# Encrypting latest TAR file
+cd {{ ninja_root_backupdir }}
+gpg --encrypt -r {{ ninja_gpg_user}} "{{ ninja_backupname_def }}-${BK_DATE}.tgz"
+
+# Deleting old files
+rm -rf {{ ninja_backupdir }}/*
+
+# Deleting non encryption files
+cd {{ ninja_root_backupdir }}
+rm -f "{{ ninja_backupname_def }}-${BK_DATE}.tgz"
+rm -f "{{ ninja_backupname_def }}-${BK_DATE}.list"
+rm -f "{{ ninja_backupname_def }}-${BK_DATE}.err"
+
+# Deleting old files
+find {{ ninja_root_backupdir }} -maxdepth 1 -mtime +20 -exec rm {} \;

@@ -1,0 +1,60 @@
+---
+# tasks file for backupninja
+- name: Install EPEL repository if needed
+  yum_repository:
+    name: epel
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    description: "EPEL YUM repo"
+    enabled: "yes"
+    gpgcheck: "yes"
+    gpgkey: https://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+  when: ansible_distribution == "CentOS" or ansible_distribution == "Red Hat Enterprise Linux" or ansible_distribution == "Fedora"
+
+- name: Install backupninja packages in DEB distributions
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - backupninja
+    - mailutils
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+- name: Install backupninja packages in RPM distributions
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - backupninja
+    - mailx
+    - which
+  when: ansible_distribution == "CentOS" or ansible_distribution == "Red Hat Enterprise Linux" or ansible_distribution == "Fedora"
+
+- name: Deploy TAR template
+  template:
+    src: tar.j2
+    dest: "/etc/backup.d/10.tar"
+    mode: '0600'
+    owner: root
+    group: root
+
+- name: Deploy MySQL backup
+  template:
+    src: mysql.j2
+    dest: "/etc/backup.d/20.mysql"
+    mode: '0600'
+    owner: root
+    group: root
+
+- name: Prepare variables for last tar template
+  set_fact:
+    ninja_backupname: "{{ ninja_backupname_def }}"
+    ninja_includes: "{{ ninja_backupdir }}"
+    ninja_backupdir: "{{ ninja_backupdir_def }}"
+
+- name: Deploy full TAR template
+  template:
+    src: tar.j2
+    dest: "/etc/backup.d/30.tar"
+    mode: '0600'
+    owner: root
+    group: root

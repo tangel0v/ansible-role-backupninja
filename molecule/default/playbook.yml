@@ -1,0 +1,75 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  vars:
+    - ninja_backupname: "test"
+    - ninja_backupname_def: "full-test"
+    - ninja_backupdir: "/tmp/backups"
+    - ninja_backupdir_def: "/def_test"
+    - ninja_includes: "/var/www/nextcloud"
+    - ninja_mysql_username: "bckadmin"
+    - ninja_mysql_userpassword: "hola"
+    - ninja_mysql_backupdir: "/tmp/backups"
+
+  pre_tasks:
+    - name: Install dependencies in Red Hat based instances
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - "mariadb-server"
+        - "unzip"
+        - "which"
+        - "MySQL-python"
+      when: ansible_distribution == "CentOS" or ansible_distribution == "Red Hat Enterprise Linux" or ansible_distribution == "Fedora"
+
+    - name: Install dependencies in Debian based instances
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - "mariadb-server"
+        - "unzip"
+        - "python-mysqldb"
+      when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+    - name: Create some directories to deploy Nextcloud
+      file:
+        name: "/var/www/"
+        state: directory
+        mode: '0775'
+        owner: root
+        group: root
+
+    - name: Create some files
+      unarchive:
+        src: "https://download.nextcloud.com/server/releases/latest.zip"
+        remote_src: "yes"
+        dest: /var/www
+        mode: '0775'
+        owner: root
+        group: root
+
+    - name: Start MariaDB in both instances
+      systemd:
+        name: mariadb
+        state: started
+
+    - name: Ensure that user password works to avoid errors during the tests
+      mysql_user:
+        name: "{{ ninja_mysql_username }}"
+        password: "{{ ninja_mysql_userpassword }}"
+        priv: '*.*:ALL'
+        check_implicit_admin: "yes"
+        login_user: root
+        login_password: ""
+        state: present
+
+  roles:
+    - role: backupninja
+
+  post_tasks:
+    - name: Launching backupninja
+      command: backupninja -n
+      changed_when: false

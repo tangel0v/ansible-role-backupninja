@@ -1,0 +1,21 @@
+---
+
+ninja_when: "everyday at 02"
+ninja_backupname: ""
+ninja_backupname_def: ""
+ninja_backupdir: ""
+ninja_backupdir_def: ""
+ninja_compress: "gzip"
+ninja_includes: ""
+ninja_excludes: "/proc /sys /dev /srv /misc /net /selinux"
+
+ninja_mysql_hotcopy: "no"
+ninja_mysql_sqldump: "yes"
+ninja_mysql_compress: "yes"
+ninja_mysql_dbhost: "localhost"
+ninja_mysql_backupdir: ""
+ninja_mysql_databases: "all"
+ninja_mysql_username: "root"
+ninja_mysql_userpassword: ""
+
+ninja_gpg_user: ""

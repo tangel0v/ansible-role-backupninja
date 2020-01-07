@@ -1,0 +1,29 @@
+# {{ ansible_managed }}
+
+# make a backup of the actual binary files using mysqlhotcopy.
+hotcopy = {{ ninja_mysql_hotcopy }}
+
+# make a backup using mysqldump. this creates text files with sql
+# commands sufficient to reconstruct the database.
+sqldump = {{ ninja_mysql_sqldump }}
+
+# compress - if yes, compress the sqldump output
+compress = {{ ninja_mysql_compress }}
+
+# host co connect to do the backups (localhost: default)
+dbhost = {{ ninja_mysql_dbhost }}
+
+# backupdir - hotcopy backups will be in a subdirectory called sqldump
+backupdir = {{ ninja_mysql_backupdir }}
+
+# databases - which databases to backup. it should be 'all' or
+# a space separated list of database names.
+databases = {{ ninja_mysql_databases }}
+
+{% if ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' %}
+configfile = /etc/mysql/debian.cnf
+{% endif %}
+{% if ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat' or ansible_distribution == 'Fedora' %}
+dbusername = {{ ninja_mysql_username }}
+dbpassword = {{ ninja_mysql_userpassword }}
+{% endif %}
