@@ -3,6 +3,8 @@ Role Name
 
 This role will install and configure backupninja based on my own needs. It uses a temporal folder to create a full backup of a list of directories and encrypt it using GPG. My recommendation is to use it to backup config files and databases to do a quick disaster recovery plan in small servers and PCs.
 
+This role has been tested against Debian, Ubuntu and Centos in their last versions but it may work in other systems too.
+
 Requirements
 ------------
 
