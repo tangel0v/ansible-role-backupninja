@@ -67,6 +67,17 @@
         login_password: ""
         state: "present"
 
+    - name: Installing dummy GPG files
+      become: true
+      vars:
+        gpg_user: "root"
+        gpg_group: "root"
+        gpg_private_key: "files/private.gpg"
+        gpg_public_key: "files/public.gpg"
+        gpg_trust_file: "files/ownertrust.gpg"
+      import_role:
+        name: ansible-gpg-import
+
   roles:
     - role: backupninja
 
