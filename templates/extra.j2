@@ -5,18 +5,22 @@ when = {{ ninja_when }}
 # Variables
 BK_DATE=$(date +%Y.%m.%d)
 
+{% if ninja_gpg_encryption_enabled %}
 # Encrypting latest TAR file
-cd {{ ninja_root_backupdir }}
+cd {{ ninja_backupdir_def }}
 gpg --encrypt -r {{ ninja_gpg_user}} "{{ ninja_backupname_def }}-${BK_DATE}.tgz"
+{% endif %}
 
 # Deleting old files
 rm -rf {{ ninja_backupdir }}/*
 
 # Deleting non encryption files
-cd {{ ninja_root_backupdir }}
+cd {{ ninja_backupdir_def }}
+{% if ninja_gpg_encryption_enabled %}
 rm -f "{{ ninja_backupname_def }}-${BK_DATE}.tgz"
+{% endif %}
 rm -f "{{ ninja_backupname_def }}-${BK_DATE}.list"
 rm -f "{{ ninja_backupname_def }}-${BK_DATE}.err"
 
 # Deleting old files
-find {{ ninja_root_backupdir }} -maxdepth 1 -mtime +20 -exec rm {} \;
+find {{ ninja_backupdir_def }} -maxdepth 1 -mtime +20 -exec rm {} \;
