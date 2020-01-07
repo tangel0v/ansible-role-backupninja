@@ -12,21 +12,19 @@
 
 - name: Install backupninja packages in DEB distributions
   package:
-    name: "{{ item }}"
+    name:
+      - backupninja
+      - mailutils
     state: present
-  with_items:
-    - backupninja
-    - mailutils
   when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
 
 - name: Install backupninja packages in RPM distributions
   package:
-    name: "{{ item }}"
+    name:
+      - backupninja
+      - mailx
+      - which
     state: present
-  with_items:
-    - backupninja
-    - mailx
-    - which
   when: ansible_distribution == "CentOS" or ansible_distribution == "Red Hat Enterprise Linux" or ansible_distribution == "Fedora"
 
 - name: Deploy TAR template
