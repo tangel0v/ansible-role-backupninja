@@ -7,7 +7,7 @@
     - ninja_backupname_def: "full-test"
     - ninja_backupdir: "/tmp/backups"
     - ninja_backupdir_def: "/def_test"
-    - ninja_includes: "/var/www/nextcloud"
+    - ninja_includes: "/var/www"
     - ninja_mysql_username: "bckadmin"
     - ninja_mysql_userpassword: "hola"
     - ninja_mysql_backupdir: "/tmp/backups"
@@ -15,41 +15,42 @@
   pre_tasks:
     - name: Install dependencies in Red Hat based instances
       package:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - "mariadb-server"
-        - "unzip"
-        - "which"
-        - "MySQL-python"
-      when: ansible_distribution == "CentOS" or ansible_distribution == "Red Hat Enterprise Linux" or ansible_distribution == "Fedora"
+        name:
+          - "mariadb-server"
+          - "unzip"
+          - "which"
+          - "MySQL-python"
+        state: "present"
+      when: ansible_distribution in ["CentOS", "Red Hat Enterprise Linux", "Fedora"]
 
     - name: Install dependencies in Debian based instances
       package:
-        name: "{{ item }}"
-        state: present
-      with_items:
+        name:
         - "mariadb-server"
         - "unzip"
         - "python-mysqldb"
-      when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+        state: "present"
+      when: ansible_distribution in ["Debian", "Ubuntu"]
 
     - name: Create some directories to deploy Nextcloud
       file:
         name: "/var/www/"
-        state: directory
-        mode: '0775'
-        owner: root
-        group: root
+        state: "directory"
+        mode: "0775"
+        owner: "root"
+        group: "root"
 
     - name: Create some files
-      unarchive:
-        src: "https://download.nextcloud.com/server/releases/latest.zip"
-        remote_src: "yes"
-        dest: /var/www
-        mode: '0775'
-        owner: root
-        group: root
+      copy:
+        content: "# The princess is in another castle."
+        dest: "/var/www/{{ item }}"
+        mode: "0775"
+        owner: "root"
+        group: "root"
+      with_items:
+        - "index.php"
+        - "config.php"
+        - "index.html"
 
     - name: Start MariaDB in both instances
       systemd:
@@ -62,9 +63,9 @@
         password: "{{ ninja_mysql_userpassword }}"
         priv: '*.*:ALL'
         check_implicit_admin: "yes"
-        login_user: root
+        login_user: "root"
         login_password: ""
-        state: present
+        state: "present"
 
   roles:
     - role: backupninja
