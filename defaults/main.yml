@@ -9,6 +9,7 @@ ninja_compress: "gzip"
 ninja_includes: ""
 ninja_excludes: "/proc /sys /dev /srv /misc /net /selinux"
 
+ninja_mysql_enabled: false
 ninja_mysql_hotcopy: "no"
 ninja_mysql_sqldump: "yes"
 ninja_mysql_compress: "yes"

@@ -42,6 +42,7 @@
     mode: "0600"
     owner: "root"
     group: "root"
+  when: ninja_mysql_enabled
 
 - name: Deploy full TAR template
   vars:

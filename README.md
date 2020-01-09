@@ -24,6 +24,7 @@ Role Variables
 | ninja\_compress | Method to compress the backups done with Backupninja | String |
 | ninja\_includes | List of folders to be saved by the backup | String |
 | ninja\_excludes | List of folder to be excluded by default | String |
+| ninja\_mysql\_enabled | Boolean to enable the backup for MySQL databases | Boolean |
 | ninja\_mysql\_hotcopy | To use _hotcopy_ in MySQL or not | String |
 | ninja\_mysql\_sqldump | To use sqldump as method to backup MySQL | String |
 | ninja\_mysql\_compress | To compress the MySQL dump or not | String |
