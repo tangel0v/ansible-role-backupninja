@@ -44,10 +44,13 @@
     group: "root"
   when: ninja_mysql_enabled
 
+- name: Assign temporal backupname to definitive
+  set_fact:
+    ninja_includes: "{{ ninja_backupdir }}"
+
 - name: Deploy full TAR template
   vars:
     ninja_backupname: "{{ ninja_backupname_def }}"
-    ninja_includes: "{{ ninja_backupdir }}"
     ninja_backupdir: "{{ ninja_backupdir_def }}"
   template:
     src: "tar.j2"
