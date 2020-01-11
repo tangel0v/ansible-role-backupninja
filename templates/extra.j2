@@ -8,7 +8,9 @@ BK_DATE=$(date +%Y.%m.%d)
 {% if ninja_gpg_encryption_enabled %}
 # Encrypting latest TAR file
 cd {{ ninja_backupdir_def }}
-gpg --encrypt -r {{ ninja_gpg_user}} "{{ ninja_backupname_def }}-${BK_DATE}.tgz"
+
+chown {{ ansible_user_id }}:root "{{ ninja_backupname_def }}-${BK_DATE}.tgz"
+su - {{ ansible_user_id }} -c "gpg --batch --encrypt -r {{ ninja_gpg_user}} {{ ninja_backupdir_def }}/{{ ninja_backupname_def }}-${BK_DATE}.tgz"
 {% endif %}
 
 # Deleting old files
