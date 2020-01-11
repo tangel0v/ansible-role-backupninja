@@ -25,4 +25,4 @@ rm -f "{{ ninja_backupname_def }}-${BK_DATE}.list"
 rm -f "{{ ninja_backupname_def }}-${BK_DATE}.err"
 
 # Deleting old files
-find {{ ninja_backupdir_def }} -maxdepth 1 -mtime +20 -exec rm {} \;
+find {{ ninja_backupdir_def }} -maxdepth 1 -mtime +{{ ninja_retention_period }} -exec rm {} \;

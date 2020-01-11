@@ -33,6 +33,7 @@ Role Variables
 | ninja\_mysql\_databases | List of databases to be saved in the backup. "all" means all databases | String |
 | ninja\_mysql\_username | The user to backup the MySQL databases | String |
 | ninja\_mysql\_password | The password of the user to connect to MySQL server | String |
+| ninja\_retention\_period | Number of days the backup should be saved | String |
 | ninja\_gpg\_encryption\_enabled | Boolean to enable the use of GPG cypher in the final step | Boolean |
 | ninja\_gpg\_user | GPG user to encrypt the final backup (_username@domain_) | String |
 

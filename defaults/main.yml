@@ -19,5 +19,7 @@ ninja_mysql_databases: "all"
 ninja_mysql_username: "root"
 ninja_mysql_userpassword: ""
 
+ninja_retention_period: 20
+
 ninja_gpg_encryption_enabled: false
 ninja_gpg_user: ""
